@@ -31,7 +31,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <img src="/logonbg.png" alt="DASS Insurance" className="h-10 w-auto" />
+          <img src="/logonbg.png" alt="" className="h-10 w-auto" />
           <span className="text-xl font-semibold text-[#1C2B33]">DASS Insurance</span>
         </Link>
 
@@ -48,6 +48,7 @@ export default function Navbar() {
         <div className="md:hidden">
           <button
             onClick={() => setMenuOpen((prev) => !prev)}
+            aria-label="Toggle Menu"
             className="text-[#1C2B33] focus:outline-none"
           >
             {menuOpen ? <X size={28} /> : <Menu size={28} />}
