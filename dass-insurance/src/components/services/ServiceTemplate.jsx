@@ -33,6 +33,10 @@ export default function ServiceTemplate() {
           desc: "High-value protection at affordable premiums for a defined term.",
         },
       ],
+      extraContent: {
+        listTitle: "Types of Health Insurance We Offer",
+        list: ["Individual", "Floater"],
+      },
     },
     {
       title: "Motor Insurance",
@@ -54,18 +58,6 @@ export default function ServiceTemplate() {
           title: "Personal Accident Cover",
           desc: "Coverage for driver/owner and optionally passengers in case of injury or death.",
         },
-        {
-          title: "Add-On Covers (Optional)",
-          desc: "Zero Depreciation, Roadside Assistance, Engine Protection, Return to Invoice, and more.",
-        },
-        {
-          title: "Cashless Repairs",
-          desc: "Repairs at network garages without paying upfront.",
-        },
-        {
-          title: "Legal Compliance",
-          desc: "Meets mandatory motor insurance requirements to avoid fines.",
-        },
       ],
       extraContent: {
         table: [
@@ -82,6 +74,20 @@ export default function ServiceTemplate() {
             covers: "Only damage to your vehicle",
           },
         ],
+        listTitle: "We Cover the Following Vehicle Categories",
+        list: [
+          "2 Wheeler",
+          "Private Car",
+          "GC CV LT 2.5 GVW",
+          "GC CV 2.5 - 7.5 GVW",
+          "GC CV 7.5 - 12 GVW",
+          "GC CV 12 - 20 GVW",
+          "GC CV 20 - 40 GVW",
+          "GC CV 40+ GVW",
+          "PC CV LT 6",
+          "PC CV MT 6",
+          "Miscellaneous",
+        ],
       },
     },
     {
@@ -90,11 +96,11 @@ export default function ServiceTemplate() {
       items: [
         {
           title: "Fire Insurance",
-          desc: "Covers loss or damage caused by fire to buildings, contents, and stock.",
+          desc: "Protects against losses from fire to buildings, contents, and stock.",
         },
         {
           title: "Marine Insurance",
-          desc: "Protects goods in transit via sea, road, or air against damage, theft, and delays.",
+          desc: "Covers goods in transit via sea, road, or air.",
         },
         {
           title: "Worker Compensation",
@@ -105,6 +111,74 @@ export default function ServiceTemplate() {
           desc: "Safeguard business properties against fire, burglary, or natural disasters.",
         },
       ],
+      extraContent: {
+        listTitle: "Types of Industrial Insurance We Offer",
+        list: ["Fire", "Marine", "Liability", "Engineering"],
+      },
+    },
+    {
+      title: "Home Insurance",
+      bg: "bg-[#F7F9FB]",
+      items: [
+        {
+          title: "Protection Against Natural Disasters",
+          desc: "Covers damages caused by floods, earthquakes, storms, and other calamities.",
+        },
+        {
+          title: "Fire & Theft Coverage",
+          desc: "Secures your home and valuables from fire damage or burglary losses.",
+        },
+        {
+          title: "Coverage for Contents",
+          desc: "Protects furniture, appliances, electronics, and other possessions inside your home.",
+        },
+        {
+          title: "Alternative Accommodation",
+          desc: "Pays for temporary housing if your home becomes uninhabitable due to covered damage.",
+        },
+      ],
+      extraContent: {
+        listTitle: "We Cover the Following Home Types",
+        list: [
+          "Independent Houses",
+          "Apartments / Flats",
+          "Rented Homes",
+          "Vacation Homes",
+        ],
+      },
+    },
+    {
+      title: "Mutual Funds & Life Insurance",
+      bg: "bg-white",
+      items: [
+        {
+          title: "Wealth Creation through Mutual Funds",
+          desc: "Invest in diversified portfolios for long-term growth with professional fund management.",
+        },
+        {
+          title: "Life Cover for Your Family’s Security",
+          desc: "Protect your loved ones with a lump-sum payout in case of unforeseen events.",
+        },
+        {
+          title: "Flexible Investment Options",
+          desc: "Choose from equity, debt, hybrid funds, and term or whole life plans.",
+        },
+        {
+          title: "Tax Benefits",
+          desc: "Save on taxes with eligible investment plans under prevailing tax laws.",
+        },
+      ],
+      extraContent: {
+        listTitle: "Plans We Offer",
+        list: [
+          "Term Life Insurance",
+          "Whole Life Insurance",
+          "Equity Mutual Funds",
+          "Debt Mutual Funds",
+          "Hybrid Mutual Funds",
+          "ULIPs (Unit Linked Insurance Plans)",
+        ],
+      },
     },
   ];
 
@@ -163,6 +237,24 @@ export default function ServiceTemplate() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            )}
+
+            {section.extraContent && section.extraContent.list && (
+              <div className="mt-8">
+                <h3 className="text-lg font-bold text-[#1C2B33] mb-3">
+                  {section.extraContent.listTitle}
+                </h3>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-gray-700">
+                  {section.extraContent.list.map((item, idx) => (
+                    <li
+                      key={idx}
+                      className="bg-white p-3 rounded-lg shadow-sm border border-gray-200"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
           </div>
