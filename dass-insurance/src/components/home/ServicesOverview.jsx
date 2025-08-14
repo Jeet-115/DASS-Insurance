@@ -16,10 +16,7 @@ export default function ServicesOverview() {
     {
       title: "Health Insurance",
       icon: "./health-insurance.png", // 🔁 Replace with correct icon path
-      items: [
-        "Individual Health Insurance",
-        "Floater Health Insurance",
-      ],
+      items: ["Individual Health Insurance", "Floater Health Insurance"],
     },
     {
       title: "Industrial Insurance",
@@ -29,6 +26,24 @@ export default function ServicesOverview() {
         "Marine Insurance",
         "Liability Insurance",
         "Engineering Insurance",
+      ],
+    },
+    {
+      title: "Life Insurance",
+      icon: "./life-insurance.png", // 🔁 Replace with correct icon path
+      items: [
+        "Term Life Insurance",
+        "Whole Life Insurance",
+        "ULIPs (Unit Linked Insurance Plans)",
+      ],
+    },
+    {
+      title: "Mutual Funds",
+      icon: "./mutual-funds.png", // 🔁 Replace with correct icon path
+      items: [
+        "Equity Mutual Funds",
+        "Debt Mutual Funds",
+        "Hybrid Mutual Funds",
       ],
     },
   ];

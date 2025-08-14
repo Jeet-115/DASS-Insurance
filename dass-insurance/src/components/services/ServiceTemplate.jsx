@@ -1,5 +1,7 @@
 // src/components/services/ServiceTemplate.jsx
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { RiArrowDropDownLine } from "react-icons/ri";
 
 export default function ServiceTemplate() {
   const fadeUp = {
@@ -11,6 +13,34 @@ export default function ServiceTemplate() {
     }),
   };
 
+  const [isMobile, setIsMobile] = useState(false);
+  // Which dropdown is open: { section: number|null, item: number|null }
+  const [openDropdown, setOpenDropdown] = useState({
+    section: null,
+    item: null,
+  });
+  // Desktop: whether the current open dropdown is "pinned" by click
+  const [pinned, setPinned] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => setIsMobile(window.innerWidth < 768);
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".dropdown-item")) {
+        setOpenDropdown({ section: null, item: null });
+        setPinned(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
+  // (Your sections data unchanged, shortened here for brevity)
   const sections = [
     {
       title: "Basic Insurance",
@@ -35,7 +65,7 @@ export default function ServiceTemplate() {
       ],
       extraContent: {
         listTitle: "Types of Health Insurance We Offer",
-        list: ["Individual", "Floater"],
+        list: [{ title: "Individual" }, { title: "Floater" }],
       },
     },
     {
@@ -76,17 +106,40 @@ export default function ServiceTemplate() {
         ],
         listTitle: "We Cover the Following Vehicle Categories",
         list: [
-          "2 Wheeler",
-          "Private Car",
-          "GC CV LT 2.5 GVW",
-          "GC CV 2.5 - 7.5 GVW",
-          "GC CV 7.5 - 12 GVW",
-          "GC CV 12 - 20 GVW",
-          "GC CV 20 - 40 GVW",
-          "GC CV 40+ GVW",
-          "PC CV LT 6",
-          "PC CV MT 6",
-          "Miscellaneous",
+          { title: "2 Wheeler" },
+          {
+            title: (
+              <span className="flex items-center justify-between w-full">
+                Private Car <RiArrowDropDownLine />
+              </span>
+            ),
+            subItems: ["0 - 1000 CC", "1000 - 1500 CC", "1500+ CC"],
+          },
+          {
+            title: (
+              <span className="flex items-center justify-between w-full">
+                GC CV <RiArrowDropDownLine />
+              </span>
+            ),
+            subItems: [
+              "0 - 2.5 GVW",
+              "2.5 - 3.5 GVW",
+              "3.5 - 7.5 GVW",
+              "7.5 - 12 GVW",
+              "12 - 40 GVW",
+              "40+ GVW",
+            ],
+          },
+          {
+            title: (
+              <span className="flex items-center justify-between w-full">
+                PC CV <RiArrowDropDownLine />
+              </span>
+            ),
+            subItems: ["PC CV < 6", "PC CV > 6"],
+          },
+
+          { title: "Miscellaneous" },
         ],
       },
     },
@@ -113,7 +166,12 @@ export default function ServiceTemplate() {
       ],
       extraContent: {
         listTitle: "Types of Industrial Insurance We Offer",
-        list: ["Fire", "Marine", "Liability", "Engineering"],
+        list: [
+          { title: "Fire" },
+          { title: "Marine" },
+          { title: "Liability" },
+          { title: "Engineering" },
+        ],
       },
     },
     {
@@ -139,6 +197,7 @@ export default function ServiceTemplate() {
       ],
       extraContent: {
         listTitle: "We Cover the Following Home Types",
+        // Strings are OK; renderer below supports strings or {title, subItems}
         list: [
           "Independent Houses",
           "Apartments / Flats",
@@ -184,8 +243,8 @@ export default function ServiceTemplate() {
 
   return (
     <>
-      {sections.map((section, idx) => (
-        <section key={idx} className={`${section.bg} py-16`}>
+      {sections.map((section, sectionIndex) => (
+        <section key={sectionIndex} className={`${section.bg} py-16`}>
           <div className="max-w-6xl mx-auto px-4">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -240,22 +299,116 @@ export default function ServiceTemplate() {
               </div>
             )}
 
+            {/* List with dropdowns (supports strings or {title, subItems}) */}
             {section.extraContent && section.extraContent.list && (
-              <div className="mt-8">
-                <h3 className="text-lg font-bold text-[#1C2B33] mb-3">
-                  {section.extraContent.listTitle}
-                </h3>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-gray-700">
-                  {section.extraContent.list.map((item, idx) => (
-                    <li
-                      key={idx}
-                      className="bg-white p-3 rounded-lg shadow-sm border border-gray-200"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <AnimatePresence>
+                <motion.div className="mt-8">
+                  <h3 className="text-lg font-bold text-[#1C2B33] mb-3">
+                    {section.extraContent.listTitle}
+                  </h3>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-gray-700">
+                    {section.extraContent.list.map((rawItem, idx) => {
+                      const isObj = typeof rawItem === "object";
+                      const title = isObj ? rawItem.title : rawItem;
+                      const subItems =
+                        isObj && rawItem.subItems ? rawItem.subItems : null;
+                      const isOpen =
+                        openDropdown.section === sectionIndex &&
+                        openDropdown.item === idx;
+
+                      return (
+                        <li
+                          key={idx}
+                          className="dropdown-item relative bg-white p-3 rounded-lg shadow-sm border border-gray-200 hover:bg-gray-50 transition cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (subItems) {
+                              // Toggle for BOTH desktop and mobile
+                              if (isOpen && pinned) {
+                                // Unpin/close if already pinned
+                                setOpenDropdown({ section: null, item: null });
+                                setPinned(false);
+                              } else {
+                                setOpenDropdown({
+                                  section: sectionIndex,
+                                  item: idx,
+                                });
+                                // Pin on desktop click, not on mobile
+                                setPinned(!isMobile);
+                              }
+                            }
+                          }}
+                          onMouseEnter={() => {
+                            if (!isMobile && subItems && !pinned) {
+                              setOpenDropdown({
+                                section: sectionIndex,
+                                item: idx,
+                              });
+                            }
+                          }}
+                          onMouseLeave={() => {
+                            if (!isMobile && subItems && !pinned) {
+                              setOpenDropdown({ section: null, item: null });
+                            }
+                          }}
+                        >
+                          <span className="font-medium">{title}</span>
+
+                          {/* Desktop dropdown */}
+                          {!isMobile && subItems && (
+                            <ul
+                              className={`absolute left-0 top-full mt-2 w-56 bg-white shadow-lg border border-gray-200 rounded-lg transition-all duration-300 overflow-hidden ${
+                                isOpen
+                                  ? "max-h-96 opacity-100"
+                                  : "max-h-0 opacity-0"
+                              }`}
+                            >
+                              {subItems.map((sub, subIdx) => (
+                                <li
+                                  key={subIdx}
+                                  className="px-4 py-2 hover:bg-gray-100 text-sm"
+                                >
+                                  {sub}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+
+                          {/* Mobile dropdown */}
+                          {isMobile && subItems && (
+                            <AnimatePresence>
+                              {isOpen && (
+                                <motion.ul
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  transition={{
+                                    duration: 0.3,
+                                    ease: "easeInOut",
+                                  }}
+                                  className="mt-3 space-y-2 border-t border-gray-200 pt-2 overflow-hidden"
+                                >
+                                  {subItems.map((sub, subIdx) => (
+                                    <motion.li
+                                      key={subIdx}
+                                      initial={{ opacity: 0, y: 5 }}
+                                      animate={{ opacity: 1, y: 0 }}
+                                      transition={{ delay: subIdx * 0.05 }}
+                                      className="px-2 py-1 bg-gray-50 rounded hover:bg-gray-100 text-sm"
+                                    >
+                                      {sub}
+                                    </motion.li>
+                                  ))}
+                                </motion.ul>
+                              )}
+                            </AnimatePresence>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </motion.div>
+              </AnimatePresence>
             )}
           </div>
         </section>

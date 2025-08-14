@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FaHeartbeat, FaCar, FaHome, FaPlane, FaIndustry, FaCheckCircle } from "react-icons/fa";
+import { FaHeartbeat, FaCar, FaHome, FaPlane, FaIndustry, FaCheckCircle, FaLifeRing, FaChartLine } from "react-icons/fa";
 
 export default function InfoSection() {
   const types = [
@@ -8,6 +8,9 @@ export default function InfoSection() {
     { name: "Home Insurance", desc: "Secures your home and belongings from fire, theft, or natural disasters.", icon: <FaHome className="text-[#D71920] text-3xl" /> },
     { name: "Travel Insurance", desc: "Covers trip cancellations, medical emergencies abroad, and lost luggage.", icon: <FaPlane className="text-[#D71920] text-3xl" /> },
     { name: "Commercial Insurance", desc: "Protects businesses with fire, marine, liability, and engineering coverage.", icon: <FaIndustry className="text-[#D71920] text-3xl" /> },
+    { name: "Life Insurance", desc: "Provides financial security for your loved ones in case of unforeseen events.", icon: <FaLifeRing className="text-[#D71920] text-3xl" /> },
+    { name: "Mutual Funds", desc: "Grow your wealth with diversified investment portfolios managed by experts.", icon: <FaChartLine className="text-[#D71920] text-3xl" /> },
+
   ];
 
   const features = [
